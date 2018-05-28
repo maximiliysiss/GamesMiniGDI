@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Object">
+    <Position X="7" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAIAAAQABAEAgAAQIIAgIAAYkAAAAMACAAAAABAA=</HashCode>
+      <FileName>SceneObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AntiAirCraft">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="AntiAirCraft::Patron">
+        <TypeIdentifier>
+          <NewMemberFileName>SceneObjects.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AIgAAEAAAAAAAkAAAAAAAQAgAAAICwQAAAAAAAAGKAA=</HashCode>
+      <FileName>SceneObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AirCraft">
+    <Position X="0.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AMkAAAAgQAAAIkIAFAAAAAAgAAAIAYAACAAAAAgCEAA=</HashCode>
+      <FileName>SceneObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AirCraftBomb">
+    <Position X="11.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAACAEAAAAAIABIAAAAAAAAEAAAAAAAQAAAAgCgA=</HashCode>
+      <FileName>SceneObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
