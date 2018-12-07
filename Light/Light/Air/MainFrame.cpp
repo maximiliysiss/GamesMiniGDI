@@ -48,7 +48,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR cmd, int nCmd) // Г�
 		30, 500, 50, 20,
 		hwnd,
 		(HMENU)0,
-		(HINSTANCE)GetWindowLong(hwnd, GWL_HINSTANCE),
+		hInst,
 		NULL);
 	HWND Button = CreateWindowEx( // Кнопка
 		0, "BUTTON",
@@ -57,7 +57,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR cmd, int nCmd) // Г�
 		70, 500, 50, 20,
 		hwnd,
 		(HMENU)1,
-		(HINSTANCE)GetWindowLong(hwnd, GWL_HINSTANCE),
+		hInst,
 		NULL);
 	while (GetMessage(&msg, 0, 0, 0))
 	{
@@ -83,7 +83,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case (UINT)1: // Нажатие кнопки
 			char buffer[15];
 			GetWindowText(GetDlgItem(hwnd, 0), buffer, 15);
-			setup.ReCreate(std::stoi(std::string(buffer)));
+			if (std::string(buffer).length() != 0)
+				setup.ReCreate(std::stoi(std::string(buffer)));
 			break;
 		}
 		break;
