@@ -66,35 +66,42 @@ LineLight::LineLight(Vector sp, Vector dir, COLORREF c) // Конструкто�
 	PaintSystem::Instance().AddObject(this);
 }
 
-void LineLight::ChangeDir(Object * obj, Vector & w, Vector & d, HDC & hdc)
+void LineLight::ChangeDir(Linz * obj, Vector & w, Vector & d, HDC & hdc)
 {
-	while ((GetPixel(hdc, (int)w.x, (int)w.y) != RGB(0, 0, 0) ||
-		GetPixel(hdc, (int)w.x, (int)w.y - 1) != RGB(0, 0, 0) || GetPixel(hdc, (int)w.x, (int)w.y - 2)) &&
-		havePoint(obj, w)) // Пока не достигнем края линзы
+	auto copy = w;
+	d.Normalize();
+	auto copyVec = w;
+	while (GetPixel(hdc, (int)w.x, (int)w.y) != RGB(0, 0, 0) && havePoint(obj, w)) // Пока не достигнем края линзы
 		w = w + d;
 	if (!havePoint(obj, w)) // Если вдруг мимо пролетели
 		return;
+	while (obj->Center.x > (int)w.x && obj->Center.y * (w.y > obj->Center.y ? 1 : -1) > w.y)
+		w += d;
 	LineTo(hdc, (int)w.x, (int)w.y);
-	while (GetPixel(hdc, (int)w.x, (int)w.y) != RGB(0, 0, 0) && havePoint(obj, w)) // Пока не достигли противоположного края
-		w = w + Vector(d.x > 0 ? 1.0f : -1.0f, 0);
-	LineTo(hdc, (int)w.x, (int)w.y);
-	d.Rotate(w, 1 * ((Linz*)obj)->k); // Повернули относительно прелом способности
-	while (havePoint(obj, w)) // Пока не вышли за пределы объекта
+	while (GetPixel(hdc, (int)w.x, (int)w.y) != RGB(0, 0, 0) && havePoint(obj, w)) // Пока не достигнем края линзы
 		w = w + d;
+	LineTo(hdc, (int)w.x, (int)w.y);
+	float k = obj->angle;
+	k = obj->Center.y < w.y ? -k + 90 : k + 90;
+	d.RotateDegree(w, k); // Повернули относительно прелом способности
+	d.Normalize();
+
 }
 
 void LineLight::Paint(HDC hdc, std::vector<Object*> objects)
 {
 	Vector way = StartPos;
 	Vector t_dir = Dir;
+	t_dir.Normalize();
 	HPEN pen = CreatePen(PS_SOLID, 2, color); // Ручка
 	HGDIOBJ obj = SelectObject(hdc, pen);
 	MoveToEx(hdc, (int)way.x, (int)way.y, NULL); // Начальная позиция луча
 	while (way.x >= -10 && way.x <= 610 && way.y >= -10 && way.y <= 610) // Пока не вышли за пределы 
 	{
-		for (auto i = objects.begin(); i != objects.end(); i++) // Проверка на пересечение со всеми объектами
-			if (havePoint(*i, way))
-				ChangeDir(*i, way, t_dir, hdc);
+		for (auto i = ++objects.begin(); i != objects.end(); i++) // Проверка на пересечение со всеми объектами
+			if (havePoint(*i, way)) {
+				ChangeDir((Linz*)*i, way, t_dir, hdc);
+			}
 		way = way + t_dir;
 	}
 	LineTo(hdc, (int)way.x, (int)way.y);

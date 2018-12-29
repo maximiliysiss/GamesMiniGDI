@@ -12,7 +12,7 @@ const UINT TIMER_FRAME = 10; // Таймер отрисовки и матема�
 char* AppClassName = "MainFraim"; // Имчя приложениz
 
 bool ButtonPress; // Нажата ли кнопка мыши
-Setup setup(IDB_SETUP, Vector(0.0f, 0.0f), 10);
+Setup setup(IDB_SETUP, Vector(0.0f, 0.0f), 1);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR cmd, int nCmd) // Главная функция
 {
@@ -29,13 +29,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR cmd, int nCmd) // Г�
 	wc.lpszMenuName = NULL;
 	wc.style = CS_VREDRAW | CS_HREDRAW;
 	RegisterClass(&wc); // Регистрация окна
-	hwnd = CreateWindow(AppClassName, "Light", WS_OVERLAPPEDWINDOW, 0, 0, 600, 600, NULL, NULL, hInst, NULL); // Создание окна
-	PaintSystem::Instance().SetWndSize(600, 600); // Указание размеров для системы рисования
+	hwnd = CreateWindow(AppClassName, "Light", WS_OVERLAPPEDWINDOW ^ WS_SIZEBOX ^ WS_MAXIMIZEBOX, 0, 0, 1000, 333, NULL, NULL, hInst, NULL); // Создание окна
+	PaintSystem::Instance().SetWndSize(1000, 333); // Указание размеров для системы рисования
 	PaintSystem::Instance().SetBackGround(IDB_BK);
-	Linz l1(IDB_LINZIN, false, Vector(200.0f, 200.0f), Object::TYPE::RECT, -0.05f); // Линзы
-	Linz l2(IDB_LINZOUT, false, Vector(300.0f, 200.0f), Object::TYPE::RECT, 1.0f);
-	Linz l3(IDB_LINZIN, false, Vector(400.0f, 200.0f), Object::TYPE::RECT, -0.04f);
-	Linz l4(IDB_LINZOUT, false, Vector(100.0f, 200.0f), Object::TYPE::RECT, 0.2f);
+	Linz l1(IDB_LINZIN, false, Vector(300.0f, 100.0f), Object::TYPE::RECT, 30); // Линзы
+	Linz l2(IDB_LINZIN, false, Vector(100.0f, 100.0f), Object::TYPE::RECT, 30); // Линзы
+	Linz l3(IDB_LINZOUT, false, Vector(200.0f, 100.0f), Object::TYPE::RECT, -30); // Линзы
+	Linz l4(IDB_LINZOUT, false, Vector(400.0f, 100.0f), Object::TYPE::RECT, -30); // Линзы
 	SetTimer(hwnd, TIMER_FRAME, 10, NULL); // Установка таймера
 	ShowWindow(hwnd, SW_SHOW);
 	UpdateWindow(hwnd);
@@ -45,7 +45,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR cmd, int nCmd) // Г�
 		NULL,
 		WS_CHILD | WS_VISIBLE | WS_BORDER |
 		ES_LEFT | ES_AUTOVSCROLL,
-		30, 500, 50, 20,
+		30, 200, 50, 20,
 		hwnd,
 		(HMENU)0,
 		hInst,
@@ -54,7 +54,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR cmd, int nCmd) // Г�
 		0, "BUTTON",
 		"Edit",
 		WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | BS_PUSHBUTTON,
-		70, 500, 50, 20,
+		70, 200, 50, 20,
 		hwnd,
 		(HMENU)1,
 		hInst,

@@ -24,6 +24,17 @@ struct Vector // Класс вектора 2д
 		x = vec2.x - vec1.x;
 		y = vec2.y - vec1.y;
 	}
+
+	void RotateDegree(Vector center, float angle)
+	{
+		Vector t(center, *this);
+		float xt = t.x;
+		t.x = xt * cos(angle) - t.y * sin(angle);
+		t.y = xt * sin(angle) + t.y*cos(angle);
+		this->x = center.x + t.x;
+		this->y = center.y + t.y;
+	}
+
 	void Rotate(Vector center, float angle)
 	{
 		angle = angle * 3.14f / 180.0f;
@@ -34,6 +45,16 @@ struct Vector // Класс вектора 2д
 		this->x = center.x + t.x;
 		this->y = center.y + t.y;
 	}
+
+	void Rotate(Vector center, float cos, float sin) {
+		Vector t(center, *this);
+		float xt = t.x;
+		t.x = xt * cos - t.y * sin;
+		t.y = xt * cos + t.y*sin;
+		this->x = center.x + t.x;
+		this->y = center.y + t.y;
+	}
+
 	Vector(float x1, float y1, float x2, float y2)
 	{
 		x = x2 - x1;
@@ -95,6 +116,10 @@ struct Vector // Класс вектора 2д
 	{
 		return x == vec.x && y == vec.y;
 	}
+
+	bool operator<(const Vector& vec) {
+		return y < vec.y;
+	}
 };
 
 class Object // Класс объекта
@@ -147,15 +172,15 @@ class Linz : public Object // Класс линзы
 {
 	friend LineLight;
 	friend PaintSystem;
-	float k; // Преломляющая способность
+	float angle; // Преломляющая способность
 public:
-	Linz(HBITMAP* hb, bool gr, Vector st, TYPE _type, float _k) :Object(hb, false, st, _type)
+	Linz(HBITMAP* hb, bool gr, Vector st, TYPE _type, float _k) :Object(hb, false, st, _type, Vector(0.0f, 0.0f), Object::Ox)
 	{
-		k = _k;
+		angle = _k;
 	}
-	Linz(WORD hb, bool gr, Vector st, TYPE _type, float _k) :Object(hb, false, st, _type)
+	Linz(WORD hb, bool gr, Vector st, TYPE _type, float _k) :Object(hb, false, st, _type, Vector(0.0f, 0.0f), Object::Ox)
 	{
-		k = _k;
+		angle = _k;
 	}
 };
 
@@ -173,7 +198,7 @@ public:
 		return vec.x >= obj->StartPos.x && vec.x <= obj->StartPos.x + obj->bm_info.bmWidth &&
 			vec.y >= obj->StartPos.y && vec.y <= obj->StartPos.y + obj->bm_info.bmHeight;
 	}
-	void ChangeDir(Object* obj, Vector& w, Vector& d, HDC& hdc); // Изменени направления
+	void ChangeDir(Linz* obj, Vector& w, Vector& d, HDC& hdc); // Изменени направления
 	void Paint(HDC hdc, std::vector<Object*> objects);
 };
 
@@ -184,8 +209,8 @@ class Setup : public Object
 	std::vector<Vector> GetDirection(int count)
 	{
 		std::vector<Vector> res;
-		float step = 90.0f / count;
-		for (int i = 0; i < count; i++)
+		float step = 180.0f / count;
+		for (int i = -count / 2; i < count / 2 + (count % 2 == 0 ? 0 : 1); i++)
 		{
 			Vector temp(1.0f, 0.0f);
 			temp.Rotate(Vector(0.0f, 0.0f), step*i);

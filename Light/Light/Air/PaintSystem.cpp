@@ -24,6 +24,8 @@ void PaintSystem::OnPaint(PAINTSTRUCT & ps)
 	for (auto i = objects_line.begin(); i != objects_line.end(); i++)
 		(*i)->Paint(hMemDC, objects_pt); // Отрисовка линии
 	objects_pt[0]->Paint(hMemDC);
+	for (auto i = ++objects_pt.begin(); i != objects_pt.end(); i++)
+		(*i)->Paint(hMemDC); // Отрисовка всех объектов
 	BitBlt(ps.hdc, 0, 0, WndSize.first, WndSize.second, hMemDC, 0, 0, SRCCOPY); // Отправка в основной контекст
 	SelectObject(hMemDC, hSysBmp);
 	DeleteObject(hMemBmp); // Удаление Битмапа
